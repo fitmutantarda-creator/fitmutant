@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Dark Theme (Default) */
+  /* Dark Theme (Default) - Tailwind otomatik CSS variables'a dönüştürür */
   --bg-body: #121212;
   --bg-card: #1e1e1e;
   --bg-header: #121212;
@@ -10,9 +10,9 @@
   --border-col: #333333;
 
   /* Brand Colors */
-  --theme-magenta: #b7ff05; /* Kilo Verme */
-  --theme-orange: #ff5757; /* Kilo Alma */
-  --theme-green: #00ffe1; /* Sporcu Beslenmesi */
+  --theme-magenta: #b7ff05;
+  --theme-orange: #ff5757;
+  --theme-green: #00ffe1;
 
   /* Typography */
   --font-heading: "Oswald", sans-serif;
@@ -23,6 +23,16 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
+}
+
+/* Light Theme Override */
+[data-theme="light"] {
+  --bg-body: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+  --text-main: #121212;
+  --text-muted: #666666;
+  --border-col: #e0e0e0;
 }
 
 /* Global Styles */
@@ -38,9 +48,7 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,
@@ -74,11 +82,7 @@ img {
 
 /* Material Symbols Icon Style */
 .material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 0,
-    "wght" 400,
-    "GRAD" 0,
-    "opsz" 24;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 /* Glass Effect Header */
@@ -90,15 +94,5 @@ img {
 /* Remove Scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* Light Theme (Optional) */
-[data-theme="light"] {
-  --bg-body: #f5f5f5;
-  --bg-card: #ffffff;
-  --bg-header: #ffffff;
-  --text-main: #121212;
-  --text-muted: #666666;
-  --border-col: #e0e0e0;
 }
 
