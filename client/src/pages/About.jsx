@@ -7,17 +7,22 @@ import {
   MdCameraAlt,
   MdChat,
 } from "react-icons/md";
+import ConfirmModal from "../components/ConfirmModal";
+import useModal from "../hooks/useModal";
 
 const About = () => {
+  const { modalProps, showConfirm } = useModal();
   const instagramUrl = "https://www.instagram.com/fit.mutant/";
   const whatsappNumber = "905418142732";
   const whatsappMessage = "Merhaba, koçluk hakkında bilgi almak istiyorum.";
 
-  const handleContactClick = (platform, url = null) => {
-    const confirmed = window.confirm(
-      `${platform} ile iletişime geçmek istiyor musunuz?`
-    );
-    if (confirmed) {
+  const handleContactClick = async (platform, url = null) => {
+    const ok = await showConfirm({
+      title: `${platform} ile İletişim`,
+      message: `${platform} ile iletişime geçmek istiyor musunuz?`,
+      confirmText: "Evet, Aç",
+    });
+    if (ok) {
       if (platform === "WhatsApp") {
         window.open(
           `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
@@ -166,6 +171,7 @@ const About = () => {
         <div className="h-4"></div>
       </div>
       <BottomNavigation />
+      <ConfirmModal {...modalProps} />
     </div>
   );
 };

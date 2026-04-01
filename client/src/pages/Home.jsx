@@ -11,6 +11,8 @@ import {
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
+import ConfirmModal from "../components/ConfirmModal";
+import useModal from "../hooks/useModal";
 
 // eslint-disable-next-line no-unused-vars
 const CategoryButton = ({ to, color, title, icon: Icon, description }) => (
@@ -50,6 +52,7 @@ const CategoryButton = ({ to, color, title, icon: Icon, description }) => (
 );
 
 const Home = () => {
+  const { modalProps, showConfirm } = useModal();
   const phone = "+905418142732";
   const email = "fitmutantarda@gmail.com";
   const instagram = "fit.mutant";
@@ -298,12 +301,14 @@ const Home = () => {
           ].map((item, i) => (
             <button
               key={i}
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-                const confirmed = window.confirm(
-                  `${item.label} ile iletişime geçmek istiyor musunuz?`
-                );
-                if (confirmed) {
+                const ok = await showConfirm({
+                  title: `${item.label} ile İletişim`,
+                  message: `${item.label} ile iletişime geçmek istiyor musunuz?`,
+                  confirmText: "Evet, Aç",
+                });
+                if (ok) {
                   if (item.link.startsWith("tel:") || item.link.startsWith("mailto:")) {
                     window.location.href = item.link;
                   } else {
@@ -336,6 +341,8 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      <ConfirmModal {...modalProps} />
     </div>
   );
 };

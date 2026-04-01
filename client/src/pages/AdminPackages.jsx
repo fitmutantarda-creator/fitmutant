@@ -7,6 +7,8 @@ import {
   deletePackage,
   uploadImage,
 } from "../services/packageService";
+import ConfirmModal from "../components/ConfirmModal";
+import useModal from "../hooks/useModal";
 
 const inp = {
   width: "100%",
@@ -32,6 +34,7 @@ const lbl = {
 };
 
 const AdminPackages = () => {
+  const { modalProps, showConfirm, showAlert } = useModal();
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -73,7 +76,7 @@ const AdminPackages = () => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Dosya boyutu 5MB'dan küçük olmalıdır");
+      showAlert({ title: "Dosya Çok Büyük", message: "Dosya boyutu 5MB'dan küçük olmalıdır.", type: "alert" });
       return;
     }
 
@@ -89,7 +92,7 @@ const AdminPackages = () => {
       setFormData((prev) => ({ ...prev, imgURL: response.url }));
     } catch (error) {
       console.error("Upload hatası:", error);
-      alert("Resim yüklenemedi");
+      showAlert({ title: "Yükleme Hatası", message: "Resim yüklenemedi. Lütfen tekrar deneyin.", type: "alert" });
       setImagePreview("");
     } finally {
       setUploading(false);
@@ -100,7 +103,7 @@ const AdminPackages = () => {
     e.preventDefault();
 
     if (!formData.imgURL) {
-      alert("Lütfen resim yükleyin");
+      showAlert({ title: "Resim Gerekli", message: "Lütfen pakete bir görsel yükleyin.", type: "alert" });
       return;
     }
 
@@ -124,7 +127,7 @@ const AdminPackages = () => {
       fetchData();
     } catch (error) {
       console.error(error);
-      alert("İşlem başarısız oldu");
+      showAlert({ title: "Hata", message: "İşlem başarısız oldu. Lütfen tekrar deneyin.", type: "alert" });
     }
   };
 
@@ -144,7 +147,13 @@ const AdminPackages = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Silmek istediğinize emin misiniz?")) {
+    const ok = await showConfirm({
+      title: "Paketi Sil",
+      message: "Bu paketi kalıcı olarak silmek istediğinize emin misiniz?",
+      confirmText: "Evet, Sil",
+      cancelText: "İptal",
+    });
+    if (ok) {
       try {
         await deletePackage(id);
         fetchData();
@@ -655,6 +664,8 @@ const AdminPackages = () => {
       )}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+
+      <ConfirmModal {...modalProps} />
     </div>
   );
 };
