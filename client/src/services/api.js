@@ -4,8 +4,10 @@ import axios from "axios";
 const isDevelopment = import.meta.env.MODE === "development";
 
 // Development: use proxy (/api -> localhost:5000)
-// Production: use full URL from .env.production
-const API_BASE_URL = isDevelopment ? "/api" : import.meta.env.VITE_API_URL;
+// Production: use full URL with /api prefix from .env.production
+const API_BASE_URL = isDevelopment
+  ? "/api"
+  : `${import.meta.env.VITE_API_URL}/api`;
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -40,4 +40,3 @@ export const deleteImage = async (publicId) => {
   const response = await api.delete(`/upload/${publicId}`);
   return response.data;
 };
-
