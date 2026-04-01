@@ -18,12 +18,8 @@ const packageSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  imgURL: {
-    type: String, // Cloudinary URL
-    default: ''
-  },
   image: {
-    type: String, // Eski verileri uyumlu tutmak için
+    type: String, // Base64 or URL
     default: ''
   },
   features: {

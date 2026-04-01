@@ -12,254 +12,328 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
-/**
- * CategoryButton Component
- * Displays category cards with icon, title, and description
- */
-const CategoryButton = ({ to, title, Icon, description, bgColor, textColor }) => (
+// eslint-disable-next-line no-unused-vars
+const CategoryButton = ({ to, color, title, icon: Icon, description }) => (
   <Link
     to={to}
-    className={`group relative flex flex-col items-center justify-center gap-3 p-5 sm:p-7 rounded-xl sm:rounded-2xl no-underline transition-smooth transform hover:scale-105 hover:shadow-xl focus-within:ring-2 focus-within:ring-offset-2 ${bgColor} ${textColor}`}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: color,
+      border: `2px solid ${color}`,
+      borderRadius: "16px",
+      padding: "30px 20px",
+      textAlign: "center",
+      color: color === "#b7ff05" ? "black" : "white",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      textDecoration: "none",
+      boxShadow: `0 10px 20px ${color}30`,
+      flex: "0 0 320px",
+      maxWidth: "100%",
+      boxSizing: "border-box",
+    }}
+    onMouseEnter={(e) =>
+      (e.currentTarget.style.transform = "translateY(-10px)")
+    }
+    onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
   >
-    <div className="flex-shrink-0 transform group-hover:scale-110 transition-transform">
-      <Icon size={40} className="sm:size-50" />
-    </div>
-    <h3 className="text-lg sm:text-2xl font-black uppercase text-center tracking-wide">
+    <Icon size={40} style={{ marginBottom: "15px" }} />
+    <h2 style={{ fontSize: "1.4rem", marginBottom: "10px", fontWeight: "800" }}>
       {title}
-    </h3>
-    <p className="text-sm sm:text-base font-medium opacity-90 text-center">
+    </h2>
+    <p style={{ fontSize: "0.95rem", fontWeight: "500", opacity: 0.9 }}>
       {description}
     </p>
   </Link>
 );
 
-/**
- * Home Page Component
- * Main landing page with hero, about, categories, and contact sections
- */
 const Home = () => {
-  const contact = {
-    phone: "+905418142732",
-    email: "fitmutantarda@gmail.com",
-    instagram: "fit.mutant",
-  };
-
-  const categories = [
-    {
-      id: "weight-loss",
-      to: "/weight-loss",
-      title: "Kilo Verme",
-      Icon: FaRunning,
-      description: "Yağ yakımı ve sıkılaşma.",
-      bgColor: "bg-[#b7ff05]",
-      textColor: "text-black",
-    },
-    {
-      id: "weight-gain",
-      to: "/weight-gain",
-      title: "Kilo Alma",
-      Icon: FaDumbbell,
-      description: "Hacim ve kütle artışı.",
-      bgColor: "bg-[#ff5757]",
-      textColor: "text-white",
-    },
-    {
-      id: "sports-nutrition",
-      to: "/sports-nutrition",
-      title: "Sporcu Beslenmesi",
-      Icon: FaBolt,
-      description: "Performans ve recovery.",
-      bgColor: "bg-[#00ffe1]",
-      textColor: "text-black",
-    },
-  ];
-
-  const socialLinks = [
-    {
-      id: "instagram",
-      icon: FaInstagram,
-      label: "Instagram",
-      color: "bg-[#e4405f]",
-      shadow: "shadow-[#e4405f]/30",
-      href: `https://www.instagram.com/${contact.instagram}/`,
-      isExternal: true,
-    },
-    {
-      id: "whatsapp",
-      icon: FaWhatsapp,
-      label: "WhatsApp",
-      color: "bg-[#25d366]",
-      shadow: "shadow-[#25d366]/30",
-      href: `https://wa.me/${contact.phone.replace("+", "")}`,
-      isExternal: true,
-    },
-    {
-      id: "email",
-      icon: FaEnvelope,
-      label: "Email",
-      color: "bg-[#d93026]",
-      shadow: "shadow-[#d93026]/30",
-      href: `mailto:${contact.email}`,
-      isExternal: false,
-    },
-    {
-      id: "phone",
-      icon: FaPhoneAlt,
-      label: "Telefon",
-      color: "bg-[#00a8e1]",
-      shadow: "shadow-[#00a8e1]/30",
-      href: `tel:${contact.phone}`,
-      isExternal: false,
-    },
-  ];
-
-  const handleSocialClick = (label, href, isExternal) => {
-    const confirmed = window.confirm(
-      `${label} ile iletişime geçmek istiyor musunuz?`
-    );
-    if (confirmed) {
-      if (isExternal) {
-        window.open(href, "_blank", "noopener,noreferrer");
-      } else {
-        window.location.href = href;
-      }
-    }
-  };
-
-  const scrollToSection = () => {
-    document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const phone = "+905418142732";
+  const email = "fitmutantarda@gmail.com";
+  const instagram = "fit.mutant";
 
   return (
-    <div className="min-h-screen w-full bg-[var(--bg-body)] text-[var(--text-main)] overflow-x-hidden">
+    <div
+      style={{
+        backgroundColor: "var(--bg-body)",
+        color: "var(--text-main)",
+        minHeight: "100vh",
+        overflowX: "hidden",
+      }}
+    >
       {/* HERO SECTION */}
-      <section className="relative w-full h-screen flex items-center justify-center text-center overflow-hidden">
+      <section
+        style={{
+          position: "relative",
+          height: "80vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          backgroundColor: "#000",
+          overflow: "hidden",
+        }}
+      >
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-50 sm:opacity-60"
-          style={{ backgroundImage: `url(${heroImg})` }}
-          role="img"
-          aria-label="Hero background"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `url(${heroImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.7,
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10" />
-        <div className="relative z-20 px-4 sm:px-6 max-w-3xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-tight mb-6 sm:mb-8 uppercase tracking-tight">
-            Hayalindeki Vücut <br />
-            <span className="text-[#b7ff05] drop-shadow-lg">MUTANT</span> MODUNDA
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
+            zIndex: 2,
+          }}
+        />
+        <div style={{ position: "relative", zIndex: 3, padding: "0 20px" }}>
+          <h1
+            style={{
+              fontSize: "clamp(2.5rem, 8vw, 4.5rem)",
+              fontWeight: "900",
+              color: "white",
+              lineHeight: "1",
+              marginBottom: "20px",
+            }}
+          >
+            HAYALİNDEKİ VÜCUT <br />{" "}
+            <span style={{ color: "#b7ff05" }}>MUTANT</span> MODUNDA
           </h1>
           <button
-            onClick={scrollToSection}
-            className="px-8 sm:px-12 py-3 sm:py-4 text-base sm:text-lg font-black bg-[#ff5757] text-white rounded-full shadow-lg shadow-[#ff5757]/50 hover:bg-[#e63e3e] active:scale-95 transition-smooth focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-            aria-label="Programını seç"
+            onClick={() =>
+              document
+                .getElementById("categories")
+                .scrollIntoView({ behavior: "smooth" })
+            }
+            style={{
+              padding: "18px 45px",
+              fontSize: "1.1rem",
+              fontWeight: "bold",
+              backgroundColor: "#ff5757",
+              color: "white",
+              border: "none",
+              borderRadius: "50px",
+              cursor: "pointer",
+              boxShadow: "0 10px 25px rgba(255, 87, 87, 0.4)",
+            }}
           >
-            Programını Seç
+            PROGRAMINI SEÇ
           </button>
         </div>
       </section>
 
-      {/* ABOUT SECTION */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 max-w-4xl mx-auto">
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 text-[var(--text-main)] uppercase tracking-wide">
-            Ben Kimim?
+      {/* BEN KİMİM & KÜNYE SECTION */}
+      <section
+        style={{ padding: "80px 20px", maxWidth: "1000px", margin: "0 auto" }}
+      >
+        <div style={{ textAlign: "center", marginBottom: "50px" }}>
+          <h2
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "900",
+              marginBottom: "20px",
+            }}
+          >
+            BEN KİMİM?
           </h2>
-          <div className="space-y-4 sm:space-y-6 text-base sm:text-lg leading-relaxed text-[var(--text-muted)]">
-            <p>
+          <div style={{ fontSize: "1.15rem", lineHeight: "1.8", opacity: 0.9 }}>
+            <p style={{ marginBottom: "15px" }}>
               Merhaba, ben{" "}
-              <strong className="text-[#b7ff05] bg-[var(--bg-body)] px-3 py-1 rounded-lg inline-block font-black">
+              <strong
+                style={{
+                  color: "#b7ff05",
+                  backgroundColor: "#000",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                }}
+              >
                 Arda Pekcan
               </strong>
               .
             </p>
             <p>
-              Girişimci ve <strong className="text-[var(--text-main)]">Wellness Coach</strong> olarak; İzmir,
+              Girişimci ve <strong>Wellness Coach</strong> olarak; İzmir,
               Antalya, İstanbul ve Ankara başta olmak üzere tüm Türkiye'ye
               dijital içerik üreticisi ve spor danışmanı olarak hizmet
-              vermekteyim.
-            </p>
-            <p>
-              "Fit Mutant" felsefesiyle amacım, sadece fiziksel değişim değil,
-              sürdürülebilir bir yaşam disiplini oluşturmanıza rehberlik
-              etmektir.
+              vermekteyim. "Fit Mutant" felsefesiyle amacım, sadece fiziksel
+              değişim değil, sürdürülebilir bir yaşam disiplini oluşturmanıza
+              rehberlik etmektir.
             </p>
           </div>
         </div>
 
-        {/* Info Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-          <div className="p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-[var(--border-col)] bg-[var(--bg-card)] text-center hover:shadow-lg transition-smooth">
+        {/* Künye Bilgi Kartları */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "20px",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              flex: "1 1 280px",
+              padding: "20px",
+              borderRadius: "15px",
+              border: "1px solid var(--border-col)",
+              textAlign: "center",
+            }}
+          >
             <FaMapMarkerAlt
-              size={32}
-              className="text-[#ff5757] mb-4 mx-auto"
-              aria-hidden="true"
+              size={25}
+              color="#ff5757"
+              style={{ marginBottom: "10px" }}
             />
-            <h3 className="text-lg sm:text-xl font-black text-[var(--text-main)] mb-2 uppercase">
-              Merkez Ofis
-            </h3>
-            <p className="text-sm sm:text-base text-[var(--text-muted)]">
+            <h4 style={{ marginBottom: "5px" }}>Merkez Ofis</h4>
+            <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
               Fahrettin Altay Mah. 65/17 Sokak No:3/A, İzmir
             </p>
           </div>
-          <div className="p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-[var(--border-col)] bg-[var(--bg-card)] text-center hover:shadow-lg transition-smooth">
+          <div
+            style={{
+              flex: "1 1 280px",
+              padding: "20px",
+              borderRadius: "15px",
+              border: "1px solid var(--border-col)",
+              textAlign: "center",
+            }}
+          >
             <FaRunning
-              size={32}
-              className="text-[#b7ff05] mb-4 mx-auto"
-              aria-hidden="true"
+              size={25}
+              color="#b7ff05"
+              style={{ marginBottom: "10px" }}
             />
-            <h3 className="text-lg sm:text-xl font-black text-[var(--text-main)] mb-2 uppercase">
-              Hizmet Bölgeleri
-            </h3>
-            <p className="text-sm sm:text-base text-[var(--text-muted)]">
+            <h4 style={{ marginBottom: "5px" }}>Hizmet Bölgeleri</h4>
+            <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
               İzmir • Antalya • İstanbul • Ankara
             </p>
           </div>
         </div>
       </section>
 
-      {/* CATEGORIES SECTION */}
+      {/* KATEGORİLER SECTION */}
       <section
         id="categories"
-        className="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--bg-body)]/50"
+        style={{ padding: "40px 20px", backgroundColor: "rgba(0,0,0,0.02)" }}
       >
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-black text-center mb-12 sm:mb-16 text-[var(--text-main)] uppercase tracking-wide">
-            Programlar
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {categories.map((cat) => (
-              <CategoryButton
-                key={cat.id}
-                to={cat.to}
-                title={cat.title}
-                Icon={cat.Icon}
-                description={cat.description}
-                bgColor={cat.bgColor}
-                textColor={cat.textColor}
-              />
-            ))}
-          </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "25px",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          <CategoryButton
+            to="/weight-loss"
+            color="var(--theme-magenta)"
+            title="KİLO VERME"
+            icon={FaRunning}
+            description="Yağ yakımı ve sıkılaşma."
+          />
+          <CategoryButton
+            to="/weight-gain"
+            color="var(--theme-orange)"
+            title="KİLO ALMA"
+            icon={FaDumbbell}
+            description="Hacim ve kütle artışı."
+          />
+          <CategoryButton
+            to="/sports-nutrition"
+            color="var(--theme-green)"
+            title="SPORCU BESLENMESİ"
+            icon={FaBolt}
+            description="Performans ve recovery."
+          />
         </div>
       </section>
 
-      {/* CONTACT SECTION */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-black mb-12 sm:mb-16 text-[var(--text-main)] uppercase tracking-wide">
-            Bana Ulaşın
-          </h2>
+      {/* SOSYAL MEDYA & İLETİŞİM */}
+      <section style={{ padding: "80px 20px", textAlign: "center" }}>
+        <h3
+          style={{ fontSize: "2rem", fontWeight: "900", marginBottom: "40px" }}
+        >
+          BANA ULAŞIN
+        </h3>
 
-          <div className="flex justify-center gap-4 sm:gap-6 flex-wrap">
-            {socialLinks.map(({ id, icon: Icon, label, color, shadow, href, isExternal }) => (
-              <button
-                key={id}
-                onClick={() => handleSocialClick(label, href, isExternal)}
-                className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${color} flex items-center justify-center text-white shadow-lg ${shadow} hover:scale-110 active:scale-95 transition-smooth focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2`}
-                title={label}
-                aria-label={label}
-              >
-                <Icon size={24} className="sm:size-28" aria-hidden="true" />
-              </button>
-            ))}
-          </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+          }}
+        >
+          {[
+            {
+              icon: FaInstagram,
+              color: "#E1306C",
+              link: `https://www.instagram.com/${instagram}/`,
+              label: "Instagram",
+            },
+            {
+              icon: FaWhatsapp,
+              color: "#25D366",
+              link: `https://wa.me/${phone.replace("+", "")}`,
+              label: "WhatsApp",
+            },
+            {
+              icon: FaEnvelope,
+              color: "#34495e",
+              link: `mailto:${email}`,
+              label: "Email",
+            },
+            { icon: FaPhoneAlt, color: "#2c3e50", link: `tel:${phone}`, label: "Telefon" },
+          ].map((item, i) => (
+            <button
+              key={i}
+              onClick={(e) => {
+                e.preventDefault();
+                const confirmed = window.confirm(
+                  `${item.label} ile iletişime geçmek istiyor musunuz?`
+                );
+                if (confirmed) {
+                  if (item.link.startsWith("tel:") || item.link.startsWith("mailto:")) {
+                    window.location.href = item.link;
+                  } else {
+                    window.open(item.link, "_blank");
+                  }
+                }
+              }}
+              style={{
+                width: "65px",
+                height: "65px",
+                borderRadius: "50%",
+                backgroundColor: item.color,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                fontSize: "1.6rem",
+                transition: "all 0.3s ease",
+                boxShadow: `0 8px 15px ${item.color}40`,
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.15) rotate(10deg)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1) rotate(0deg)")
+              }
+            >
+              <item.icon />
+            </button>
+          ))}
         </div>
       </section>
     </div>

@@ -4,18 +4,14 @@ import Header from "../components/Header";
 import ListItemCard from "../components/ListItemCard";
 import BottomNavigation from "../components/BottomNavigation";
 import {
-  MdArrowBackIosNew,
   MdBolt,
   MdSpeed,
-  MdAdd,
   MdScience,
   MdRestaurantMenu,
 } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
 const AthleteNutrition = () => {
   const [activeTab, setActiveTab] = useState("Pre-Workout");
-  const navigate = useNavigate();
 
   return (
     <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30 min-h-screen pb-24 transition-colors">
@@ -26,13 +22,13 @@ const AthleteNutrition = () => {
       {/* Main Content */}
       <main className="px-6 py-6 space-y-8">
         {/* Hero Scientific Banner */}
-        <div className="relative rounded-xl overflow-hidden aspect-[16/9] border border-primary/20 shadow-md dark:shadow-none">
+        <div className="relative rounded-xl overflow-hidden aspect-video border border-primary/20 shadow-md dark:shadow-none">
           <img
             alt="Performance Nutrition"
             className="w-full h-full object-cover brightness-75 dark:brightness-50"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFdRmVTdgCEhwQu95dqyB6aKuCRVBblPO_FjC-N_Ch52pa5SVAoocgwbqDnuGa0Rx5Vw598jwZqj-4RAC6LWa8Y_qpqjoFUXxUte9NJTTOlhdRwD6av2YrG6ZrGOpen8qJkt-YTvlEsv331iToDhCC2DOUvflLrQesEFOLUfVpIQpVibDRrvwlvGzOVhjWy_Estk6qD27pv2ZWmMgoMitFBpwG8C3awU8qDkLbVGcbw2l917KtdvxEtLG4We56lp1_t8E1aXRH0iEW"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent dark:from-background-dark dark:via-transparent dark:to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent dark:from-background-dark dark:via-transparent dark:to-transparent"></div>
           <div className="absolute bottom-4 left-4 right-4">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary text-background-dark font-bold uppercase tracking-tighter">
@@ -202,7 +198,7 @@ const AthleteNutrition = () => {
         </div>
 
         {/* Scientific Lab Info Section */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-primary/20 relative overflow-hidden text-white shadow-lg">
+        <div className="p-6 rounded-2xl bg-linear-to-br from-slate-900 to-slate-800 border border-primary/20 relative overflow-hidden text-white shadow-lg">
           <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 blur-3xl rounded-full"></div>
           <div className="relative z-10 flex flex-col items-center text-center space-y-3">
             <MdScience className="text-primary text-4xl" />
@@ -220,7 +216,7 @@ const AthleteNutrition = () => {
       </main>
 
       {/* Fixed Bottom Action Bar (iOS Style) */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-gradient-to-t from-background-light/95 via-background-light/95 to-transparent dark:from-background-dark dark:via-background-dark/95 dark:to-transparent pointer-events-none pb-24 z-40">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-linear-to-t from-background-light/95 via-background-light/95 to-transparent dark:from-background-dark dark:via-background-dark/95 dark:to-transparent pointer-events-none pb-24 z-40">
         <button className="w-full pointer-events-auto bg-primary text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
           <MdRestaurantMenu className="text-xl" />
           GÜNLÜK PLANA EKLE

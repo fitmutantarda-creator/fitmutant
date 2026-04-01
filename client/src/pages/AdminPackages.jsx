@@ -8,6 +8,29 @@ import {
   uploadImage,
 } from "../services/packageService";
 
+const inp = {
+  width: "100%",
+  backgroundColor: "var(--bg-body)",
+  border: "1.5px solid var(--border-col)",
+  borderRadius: "10px",
+  padding: "10px 14px",
+  fontSize: "14px",
+  color: "var(--text-main)",
+  outline: "none",
+  transition: "border-color 0.2s ease",
+  boxSizing: "border-box",
+};
+
+const lbl = {
+  fontSize: "10px",
+  fontWeight: 800,
+  textTransform: "uppercase",
+  letterSpacing: "0.1em",
+  color: "var(--text-muted)",
+  display: "block",
+  marginBottom: "6px",
+};
+
 const AdminPackages = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,20 +72,17 @@ const AdminPackages = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Dosya boyutunu kontrol et (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Dosya boyutu 5MB'dan küçük olmalıdır");
       return;
     }
 
-    // Preview göster
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
 
-    // Upload et
     try {
       setUploading(true);
       const response = await uploadImage(file);
@@ -149,333 +169,492 @@ const AdminPackages = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 bg-(--bg-body)">
-      <main className="px-4 py-8 space-y-10 max-w-7xl mx-auto flex flex-col items-center">
-        <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-4 px-2">
-          <h1 className="text-2xl font-bold text-(--text-main) uppercase tracking-widest font-heading text-center sm:text-left">
+    <div style={{ minHeight: "100vh", paddingBottom: "80px", backgroundColor: "var(--bg-body)" }}>
+      <main style={{ padding: "24px 16px", maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}>
+
+        {/* Header */}
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+          <h1 style={{
+            fontSize: "clamp(1.1rem, 4vw, 1.5rem)",
+            fontWeight: 900,
+            color: "var(--text-main)",
+            textTransform: "uppercase",
+            letterSpacing: "0.12em",
+            fontFamily: "var(--font-heading)",
+          }}>
             Yönetim Paneli
           </h1>
-          <span className="bg-(--bg-card) border border-(--border-col) text-(--text-muted) px-4 py-1.5 rounded-full text-xs font-bold uppercase shadow-sm">
+          <span style={{
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border-col)",
+            color: "var(--text-muted)",
+            padding: "4px 14px",
+            borderRadius: "999px",
+            fontSize: "10px",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}>
             {packages.length} Kayıtlı Paket
           </span>
         </div>
-        {(showForm || packages.length === 0) && (
-          <section
-            className="bg-(--bg-card) border border-(--border-col) rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-4 duration-500 w-full max-w-4xl mx-auto"
-            style={{
-              padding: "clamp(1rem, 4vw, 2.5rem)",
-              marginBottom: "1.5rem",
-            }}
-          >
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 border-b border-(--border-col)/30 pb-4">
-              <div className="text-left">
-                <h2 className="text-xl md:text-2xl font-bold text-(--text-main) uppercase font-heading">
-                  {editingId ? "Paket Güncelle" : "Yeni Paket"}
-                </h2>
-                <p className="text-[10px] md:text-xs text-(--text-muted) mt-1 font-medium uppercase tracking-wider">
-                  {editingId ? "Düzenleme modu aktif" : "Tüm alanları doldurun"}
-                </p>
-              </div>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-              {/* Image Upload Section */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                  Paket Görseli
-                </label>
-                <div className="relative border-2 border-dashed border-(--theme-orange)/30 rounded-xl p-4 hover:border-(--theme-orange)/60 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    disabled={uploading}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  {imagePreview ? (
-                    <div className="flex flex-col items-center gap-3">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        style={{
-                          maxWidth: "200px",
-                          maxHeight: "200px",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <p className="text-xs text-(--text-muted)">
-                        {uploading ? "Yükleniyor..." : "Görsel yüklendi"}
-                      </p>
-                      {!uploading && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setImagePreview("");
-                            setFormData((prev) => ({ ...prev, imgURL: "" }));
-                            document.querySelector('input[type="file"]').value =
-                              "";
-                          }}
-                          className="text-xs text-red-500 hover:text-red-600"
-                        >
-                          Sil
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-(--text-muted) text-sm">
-                        {uploading
-                          ? "Yükleniyor..."
-                          : "Resim seçmek için tıklayın"}
-                      </p>
-                      <p className="text-[10px] text-(--text-muted)/60 mt-1">
-                        (Max 5MB)
-                      </p>
-                    </div>
-                  )}
+        {/* Form Section */}
+        {(showForm || packages.length === 0) && (
+          <section style={{
+            backgroundColor: "var(--bg-card)",
+            border: "1px solid var(--border-col)",
+            borderRadius: "16px",
+            overflow: "hidden",
+          }}>
+            <div style={{ padding: "clamp(16px, 4vw, 32px)" }}>
+              {/* Form Header */}
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: "12px",
+                marginBottom: "20px",
+                paddingBottom: "16px",
+                borderBottom: "1px solid color-mix(in srgb, var(--border-col) 30%, transparent)",
+              }}>
+                <div>
+                  <h2 style={{
+                    fontSize: "clamp(1rem, 3vw, 1.3rem)",
+                    fontWeight: 900,
+                    color: "var(--text-main)",
+                    textTransform: "uppercase",
+                    fontFamily: "var(--font-heading)",
+                    letterSpacing: "0.08em",
+                    margin: 0,
+                  }}>
+                    {editingId ? "Paket Güncelle" : "Yeni Paket"}
+                  </h2>
+                  <p style={{ fontSize: "10px", color: "var(--text-muted)", marginTop: "4px", fontWeight: 600, textTransform: "uppercase" }}>
+                    {editingId ? "Düzenleme modu aktif" : "Tüm alanları doldurun"}
+                  </p>
                 </div>
               </div>
 
-              {" "}
-              {/* Mobilde aralar daha dar */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div className="space-y-1.5 text-left w-full">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                    Paket Adı
-                  </label>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                {/* Image Upload */}
+                <div>
+                  <label style={lbl}>Paket Görseli</label>
+                  <div style={{
+                    position: "relative",
+                    border: "2px dashed color-mix(in srgb, var(--theme-orange) 35%, transparent)",
+                    borderRadius: "12px",
+                    padding: "16px",
+                    transition: "border-color 0.2s ease",
+                  }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      disabled={uploading}
+                      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer", zIndex: 10 }}
+                    />
+                    {imagePreview ? (
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          style={{ maxWidth: "180px", maxHeight: "180px", borderRadius: "10px", objectFit: "contain" }}
+                        />
+                        <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                          {uploading ? "Yükleniyor..." : "Görsel yüklendi"}
+                        </p>
+                        {!uploading && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImagePreview("");
+                              setFormData((prev) => ({ ...prev, imgURL: "" }));
+                              const fileInput = document.querySelector('input[type="file"]');
+                              if (fileInput) fileInput.value = "";
+                            }}
+                            style={{ fontSize: "11px", color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontWeight: 700 }}
+                          >
+                            Görseli Sil
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div style={{ textAlign: "center", padding: "24px 0" }}>
+                        <p style={{ color: "var(--text-muted)", fontSize: "13px" }}>
+                          {uploading ? "Yükleniyor..." : "Resim seçmek için tıklayın"}
+                        </p>
+                        <p style={{ color: "var(--text-muted)", fontSize: "11px", marginTop: "4px", opacity: 0.6 }}>(Max 5MB)</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Paket Adı */}
+                <div>
+                  <label style={lbl}>Paket Adı</label>
                   <input
                     required
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    style={{ padding: "12px 16px" }} // Mobilde daha ince (16px -> 12px)
-                    className="w-full bg-(--bg-body) rounded-xl border border-(--border-col) text-(--text-main) outline-none focus:border-(--theme-orange)"
+                    style={inp}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = "var(--theme-orange)")}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border-col)")}
                   />
                 </div>
-                <div className="space-y-1.5 text-left w-full">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                    Kategori
-                  </label>
+
+                {/* Kategori */}
+                <div>
+                  <label style={lbl}>Kategori</label>
                   <select
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    style={{ padding: "12px 16px" }}
-                    className="w-full bg-(--bg-body) rounded-xl border border-(--border-col) text-(--text-main) outline-none appearance-none"
+                    style={inp}
                   >
                     <option value="Kilo Verme">Kilo Verme</option>
                     <option value="Kilo Alma">Kilo Alma</option>
                     <option value="Sporcu Beslenmesi">Sporcu Beslenmesi</option>
                   </select>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6">
-                {" "}
-                {/* Mobilde yan yana gelmesi için grid-cols-2 yaptık */}
-                <div className="space-y-1.5 text-left w-full">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                    Eski Fiyat
-                  </label>
-                  <input
-                    required
-                    name="originalPrice"
-                    type="number"
-                    value={formData.originalPrice}
-                    onChange={handleInputChange}
-                    style={{ padding: "12px 16px" }}
-                    className="w-full bg-(--bg-body) rounded-xl border border-(--border-col) text-(--text-main)"
-                  />
+
+                {/* Fiyatlar */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <div>
+                    <label style={lbl}>Eski Fiyat</label>
+                    <input
+                      required
+                      name="originalPrice"
+                      type="number"
+                      value={formData.originalPrice}
+                      onChange={handleInputChange}
+                      style={inp}
+                      onFocus={(e) => (e.currentTarget.style.borderColor = "var(--theme-orange)")}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border-col)")}
+                    />
+                  </div>
+                  <div>
+                    <label style={lbl}>Yeni Fiyat</label>
+                    <input
+                      required
+                      name="price"
+                      type="number"
+                      value={formData.price}
+                      onChange={handleInputChange}
+                      style={{ ...inp, color: "var(--theme-orange)", fontWeight: 700 }}
+                      onFocus={(e) => (e.currentTarget.style.borderColor = "var(--theme-orange)")}
+                      onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border-col)")}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-1.5 text-left w-full">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                    Yeni Fiyat
-                  </label>
-                  <input
+
+                {/* Özellikler */}
+                <div>
+                  <label style={lbl}>Özellikler</label>
+                  <textarea
                     required
-                    name="price"
-                    type="number"
-                    value={formData.price}
+                    name="features"
+                    rows={3}
+                    value={formData.features}
                     onChange={handleInputChange}
-                    style={{ padding: "12px 16px" }}
-                    className="w-full bg-(--bg-body) rounded-xl border border-(--border-col) text-(--theme-orange) font-bold"
+                    placeholder="Virgülle ayırın (örn: Protein desteği, Vitamin, Mineral)"
+                    style={{ ...inp, resize: "none" }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = "var(--theme-orange)")}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border-col)")}
                   />
+                  <p style={{ fontSize: "10px", color: "var(--text-muted)", marginTop: "4px", opacity: 0.7 }}>
+                    Özellikleri virgülle ayırarak yazın
+                  </p>
                 </div>
-              </div>
-              <div className="space-y-1.5 text-left w-full">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) ml-1">
-                  Özellikler
-                </label>
-                <textarea
-                  required
-                  name="features"
-                  rows="3" // Satır sayısını 4'ten 3'e indirdik
-                  value={formData.features}
-                  onChange={handleInputChange}
-                  style={{ padding: "12px 16px" }}
-                  className="w-full bg-(--bg-body) rounded-xl border border-(--border-col) text-(--text-main) outline-none resize-none"
-                ></textarea>
-              </div>
-              <div className="flex flex-row gap-3 pt-2">
-                {" "}
-                {/* Mobilde zorla yan yana tutmak için flex-row */}
-                {editingId && (
+
+                {/* Buttons */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", paddingTop: "8px" }}>
+                  {editingId && (
+                    <button
+                      onClick={resetForm}
+                      type="button"
+                      style={{
+                        flex: 1,
+                        backgroundColor: "rgba(239,68,68,0.1)",
+                        color: "#ef4444",
+                        border: "1px solid rgba(239,68,68,0.25)",
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "11px",
+                        fontWeight: 900,
+                        fontFamily: "var(--font-heading)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      <MdClose size={16} />
+                      <span>VAZGEÇ</span>
+                    </button>
+                  )}
                   <button
-                    onClick={resetForm}
-                    type="button"
+                    type="submit"
+                    disabled={uploading}
                     style={{
-                      padding: "14px 16px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      lineHeight: "1",
+                      flex: 2,
+                      backgroundColor: uploading ? "color-mix(in srgb, var(--theme-orange) 60%, transparent)" : "var(--theme-orange)",
+                      color: "#000",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "13px 20px",
+                      fontSize: "11px",
+                      fontWeight: 900,
+                      fontFamily: "var(--font-heading)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.12em",
+                      cursor: uploading ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
                     }}
-                    className="flex-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-[10px] font-black tracking-widest uppercase hover:bg-red-500/20 transition-all"
                   >
-                    <MdClose size={16} />
-                    <span>VAZGEÇ</span>
+                    {editingId ? "GÜNCELLE" : "PAKET EKLE"}
                   </button>
-                )}
-                <button
-                  type="submit"
-                  disabled={uploading}
-                  style={{
-                    padding: "14px 16px",
-                    lineHeight: "1",
-                    opacity: uploading ? 0.5 : 1,
-                  }}
-                  className="flex-2 bg-(--theme-orange) text-black font-black rounded-xl shadow-lg uppercase tracking-widest text-[10px] active:scale-95 disabled:cursor-not-allowed"
-                >
-                  {editingId ? "KAYDET" : "EKLE"}
-                </button>
-              </div>
-            </form>
+                </div>
+              </form>
+            </div>
           </section>
         )}
 
-        <section className="w-full flex justify-center px-4">
-          {" "}
-          {/* Section'ı flex yaparak içindekini ortaladık */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl justify-center">
-            {!loading &&
-              packages.map((pkg) => {
+        {/* Packages Grid */}
+        <section>
+          {loading ? (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "60px 0" }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                border: "3px solid var(--border-col)",
+                borderTopColor: "var(--theme-orange)",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }} />
+            </div>
+          ) : (
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
+              gap: "20px",
+            }}>
+              {packages.map((pkg) => {
                 const colorMap = {
                   "Kilo Verme": "var(--theme-magenta)",
                   "Kilo Alma": "var(--theme-orange)",
                   "Sporcu Beslenmesi": "var(--theme-green)",
                 };
-                const themeColor =
-                  colorMap[pkg.category] || "var(--theme-orange)";
+                const themeColor = colorMap[pkg.category] || "var(--theme-orange)";
 
                 return (
                   <div
                     key={pkg._id}
-                    className="bg-(--bg-card) rounded-[2.5rem] border-x border-b border-(--border-col) border-t-[6px] flex flex-col shadow-lg transition-all duration-500 w-full max-w-sm md:max-w-none mx-auto relative overflow-hidden"
-                    style={{ borderTopColor: themeColor, padding: "2.5rem" }}
+                    style={{
+                      backgroundColor: "var(--bg-card)",
+                      borderRadius: "18px",
+                      border: "1px solid var(--border-col)",
+                      borderTop: `5px solid ${themeColor}`,
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                      transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                      overflow: "hidden",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-3px)";
+                      e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.15)";
+                    }}
                   >
-                    <div className="flex justify-between items-start mb-8">
-                      <span
-                        className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border"
-                        style={{
-                          backgroundColor: `color-mix(in srgb, ${themeColor} 12%, transparent)`,
-                          color: themeColor,
-                          borderColor: `color-mix(in srgb, ${themeColor} 25%, transparent)`,
-                        }}
-                      >
-                        {pkg.category}
-                      </span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(pkg)}
-                          className="w-10 h-10 flex items-center justify-center rounded-xl bg-(--bg-body) border border-(--border-col) text-(--text-muted) hover:text-(--theme-orange) transition-all"
-                        >
-                          <MdEdit size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(pkg._id)}
-                          className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 transition-all"
-                        >
-                          <MdDelete size={18} />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Image Display */}
-                    {(pkg.imgURL || pkg.image) && (
-                      <div
-                        style={{
-                          width: "100%",
-                          height: "200px",
-                          borderRadius: "12px",
-                          marginBottom: "16px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <img
-                          src={pkg.imgURL || pkg.image}
-                          alt={pkg.title}
+                    <div style={{ padding: "16px" }}>
+                      {/* Card Header */}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+                        <span
                           style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
+                            padding: "4px 10px",
+                            borderRadius: "999px",
+                            fontSize: "9px",
+                            fontWeight: 900,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                            backgroundColor: `color-mix(in srgb, ${themeColor} 12%, transparent)`,
+                            color: themeColor,
+                            border: `1px solid color-mix(in srgb, ${themeColor} 30%, transparent)`,
                           }}
-                        />
-                      </div>
-                    )}
-
-                    <h3 className="text-2xl font-black text-(--text-main) mb-3 uppercase leading-tight tracking-tight">
-                      {pkg.title}
-                    </h3>
-
-                    <div className="flex items-baseline gap-3 mb-8">
-                      <span
-                        className="text-3xl font-black tracking-tighter"
-                        style={{ color: themeColor }}
-                      >
-                        {pkg.price} ₺
-                      </span>
-                      <span className="text-sm text-(--text-muted) line-through opacity-40 font-bold">
-                        {pkg.originalPrice} ₺
-                      </span>
-                    </div>
-
-                    <div className="mt-auto pt-8 border-t border-(--border-col)/40">
-                      <ul className="space-y-4">
-                        {pkg.features.map((feature, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-4 text-[15px] text-(--text-main) font-medium"
+                        >
+                          {pkg.category}
+                        </span>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            onClick={() => handleEdit(pkg)}
+                            style={{
+                              width: "34px",
+                              height: "34px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "10px",
+                              backgroundColor: "var(--bg-body)",
+                              border: "1px solid var(--border-col)",
+                              color: "var(--text-muted)",
+                              cursor: "pointer",
+                              transition: "color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--theme-orange)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
                           >
-                            <span
-                              className="w-2.5 h-2.5 rounded-full shrink-0 mt-1.5"
-                              style={{ backgroundColor: themeColor }}
-                            ></span>
-                            <span className="leading-snug text-left">
-                              {feature}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                            <MdEdit size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(pkg._id)}
+                            style={{
+                              width: "34px",
+                              height: "34px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "10px",
+                              backgroundColor: "rgba(239,68,68,0.1)",
+                              border: "1px solid rgba(239,68,68,0.2)",
+                              color: "#ef4444",
+                              cursor: "pointer",
+                              transition: "background-color 0.2s ease",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.2)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.1)")}
+                          >
+                            <MdDelete size={16} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Image */}
+                      {(pkg.imgURL || pkg.image) && (
+                        <div style={{
+                          width: "100%",
+                          height: "160px",
+                          borderRadius: "10px",
+                          marginBottom: "12px",
+                          overflow: "hidden",
+                          backgroundColor: "var(--bg-body)",
+                        }}>
+                          <img
+                            src={pkg.imgURL || pkg.image}
+                            alt={pkg.title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }}
+                            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                          />
+                        </div>
+                      )}
+
+                      {/* Title */}
+                      <h3 style={{
+                        fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+                        fontWeight: 900,
+                        color: "var(--text-main)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                        lineHeight: 1.2,
+                        marginBottom: "8px",
+                        fontFamily: "var(--font-heading)",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}>
+                        {pkg.title}
+                      </h3>
+
+                      {/* Price */}
+                      <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "16px" }}>
+                        <span style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", fontWeight: 900, color: themeColor, letterSpacing: "-0.02em" }}>
+                          {pkg.price} ₺
+                        </span>
+                        <span style={{ fontSize: "13px", color: "var(--text-muted)", textDecoration: "line-through", opacity: 0.45, fontWeight: 700 }}>
+                          {pkg.originalPrice} ₺
+                        </span>
+                      </div>
+
+                      {/* Features */}
+                      <div style={{
+                        paddingTop: "14px",
+                        borderTop: "1px solid color-mix(in srgb, var(--border-col) 40%, transparent)",
+                      }}>
+                        <ul style={{ display: "flex", flexDirection: "column", gap: "8px", listStyle: "none", padding: 0, margin: 0 }}>
+                          {pkg.features.slice(0, 4).map((feature, idx) => (
+                            <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13px", color: "var(--text-main)", fontWeight: 500 }}>
+                              <span style={{
+                                width: "7px",
+                                height: "7px",
+                                borderRadius: "50%",
+                                backgroundColor: themeColor,
+                                flexShrink: 0,
+                                marginTop: "5px",
+                              }} />
+                              <span style={{ lineHeight: 1.4 }}>{feature}</span>
+                            </li>
+                          ))}
+                          {pkg.features.length > 4 && (
+                            <li style={{ fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic" }}>
+                              +{pkg.features.length - 4} özellik daha
+                            </li>
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 );
               })}
-          </div>
+            </div>
+          )}
         </section>
       </main>
 
-      {!showForm && (
+      {/* Floating Action Button */}
+      {!showForm && packages.length > 0 && (
         <button
           onClick={() => {
             setShowForm(true);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-(--theme-orange) text-black rounded-full shadow-2xl flex items-center justify-center active:scale-90 hover:scale-110 transition-all z-40"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            width: "52px",
+            height: "52px",
+            backgroundColor: "var(--theme-orange)",
+            color: "#000",
+            border: "none",
+            borderRadius: "50%",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            zIndex: 40,
+            transition: "transform 0.2s ease",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.12)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          aria-label="Yeni paket ekle"
         >
-          <MdAdd size={32} />
+          <MdAdd size={26} />
         </button>
       )}
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };

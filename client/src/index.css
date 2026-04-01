@@ -1,7 +1,8 @@
-@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
 
-@theme {
-  /* Dark Theme (Default) */
+/* Dark Theme (Default) - CSS Variables */
+:root {
   --bg-body: #121212;
   --bg-card: #1e1e1e;
   --bg-header: #121212;
