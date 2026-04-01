@@ -9,7 +9,7 @@ import {
   FaEnvelope,
   FaPhoneAlt,
   FaMapMarkerAlt,
-  FaWhatsapp,
+  FaFacebook,
 } from "react-icons/fa";
 import ConfirmModal from "../components/ConfirmModal";
 import useModal from "../hooks/useModal";
@@ -286,10 +286,10 @@ const Home = () => {
               label: "Instagram",
             },
             {
-              icon: FaWhatsapp,
-              color: "#25D366",
-              link: `https://wa.me/${phone.replace("+", "")}`,
-              label: "WhatsApp",
+              icon: FaFacebook,
+              color: "#1877F2",
+              link: "https://www.facebook.com/fit.mutantt",
+              label: "Facebook",
             },
             {
               icon: FaEnvelope,
@@ -310,7 +310,9 @@ const Home = () => {
                 });
                 if (ok) {
                   if (item.link.startsWith("tel:") || item.link.startsWith("mailto:")) {
-                    window.location.href = item.link;
+                    const a = document.createElement("a");
+                    a.href = item.link;
+                    a.click();
                   } else {
                     window.open(item.link, "_blank");
                   }
