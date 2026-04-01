@@ -35,35 +35,25 @@ const AdminAuthModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div
-        className="bg-[var(--bg-card)] border border-[var(--border-col)] rounded-[2.5rem] w-full max-w-85 shadow-2xl relative"
-        style={{ padding: "40px 24px" }}
-      >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-col)] rounded-2xl w-full max-w-sm shadow-2xl relative p-6 sm:p-10">
         <button
           onClick={onClose}
-          style={{ width: "40px", height: "40px" }}
-          className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-(--bg-body) text-(--text-muted) hover:text-white transition-all active:scale-90"
+          className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-body)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-fast active:scale-90 font-black text-xl"
         >
           ✕
         </button>
 
-        <div className="text-center" style={{ marginBottom: "32px" }}>
-          {" "}
-          <h2 className="text-xl font-black text-(--text-main) mb-2 font-heading uppercase tracking-[0.2em]">
+        <div className="text-center mb-8">
+          <h2 className="text-xl sm:text-2xl font-black text-[var(--text-main)] mb-3 uppercase tracking-wider">
             ADMİN GİRİŞİ
           </h2>
-          <div className="h-1 w-12 bg-(--theme-orange) mx-auto rounded-full opacity-80"></div>
+          <div className="h-1 w-12 bg-[#ff5757] mx-auto rounded-full opacity-90"></div>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col"
-          style={{ gap: "20px" }}
-        >
-          {" "}
-          <div className="flex flex-col" style={{ gap: "8px" }}>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-(--text-muted) ml-1">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-black uppercase tracking-widest text-[var(--text-muted)]">
               GÜVENLİK ANAHTARI
             </label>
             <input
@@ -72,32 +62,18 @@ const AdminAuthModal = ({ onClose }) => {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                padding: "18px",
-                height: "60px",
-                letterSpacing: "0.5em",
-                display: "block",
-              }}
-              className="w-full bg-(--bg-body) text-(--text-main) border border-(--border-col) rounded-2xl outline-none focus:border-(--theme-orange) text-center text-xl font-mono shadow-inner appearance-none"
+              className="w-full px-4 py-3 sm:py-4 bg-[var(--bg-body)] text-[var(--text-main)] border border-[var(--border-col)] rounded-lg outline-none focus:border-[#ff5757] text-center text-lg font-mono shadow-inner appearance-none transition-fast"
             />
           </div>
           {error && (
-            <p className="text-red-500 text-[10px] font-black text-center uppercase tracking-wider">
+            <p className="text-red-400 text-xs font-black text-center uppercase tracking-wider">
               {error}
             </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: "18px",
-              height: "60px",
-              marginTop: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            className="w-full bg-(--text-main) text-(--bg-body) font-black rounded-2xl uppercase tracking-[0.15em] text-xs active:scale-[0.96] transition-all shadow-lg disabled:opacity-50"
+            className="w-full px-4 py-3 sm:py-4 bg-[var(--text-main)] text-[var(--bg-body)] font-black rounded-lg uppercase tracking-wider text-sm active:scale-95 transition-fast shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "GİRİŞ YAPILIYOR..." : "SİSTEME GİR"}
           </button>

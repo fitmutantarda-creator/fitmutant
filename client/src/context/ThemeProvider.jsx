@@ -7,7 +7,8 @@ export const ThemeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
