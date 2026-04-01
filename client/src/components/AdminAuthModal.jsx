@@ -37,7 +37,7 @@ const AdminAuthModal = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div
-        className="bg-(--bg-card) border border-(--border-col) rounded-[2.5rem] w-full max-w-85 shadow-2xl relative"
+        className="bg-[var(--bg-card)] border border-[var(--border-col)] rounded-[2.5rem] w-full max-w-85 shadow-2xl relative"
         style={{ padding: "40px 24px" }}
       >
         <button
