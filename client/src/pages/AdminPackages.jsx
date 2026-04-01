@@ -46,7 +46,7 @@ const AdminPackages = () => {
     originalPrice: "",
     category: "Kilo Alma",
     features: "",
-    imgURL: "",
+    image: "",
   });
   const [editingId, setEditingId] = useState(null);
 
@@ -89,7 +89,7 @@ const AdminPackages = () => {
     try {
       setUploading(true);
       const response = await uploadImage(file);
-      setFormData((prev) => ({ ...prev, imgURL: response.url }));
+      setFormData((prev) => ({ ...prev, image: response.url }));
     } catch (error) {
       console.error("Upload hatası:", error);
       showAlert({ title: "Yükleme Hatası", message: "Resim yüklenemedi. Lütfen tekrar deneyin.", type: "alert" });
@@ -102,7 +102,7 @@ const AdminPackages = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.imgURL) {
+    if (!formData.image) {
       showAlert({ title: "Resim Gerekli", message: "Lütfen pakete bir görsel yükleyin.", type: "alert" });
       return;
     }
@@ -138,9 +138,9 @@ const AdminPackages = () => {
       originalPrice: pkg.originalPrice,
       category: pkg.category,
       features: pkg.features.join(", "),
-      imgURL: pkg.imgURL || pkg.image || "",
+      image: pkg.image || "",
     });
-    setImagePreview(pkg.imgURL || pkg.image || "");
+    setImagePreview(pkg.image || "");
     setEditingId(pkg._id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -170,7 +170,7 @@ const AdminPackages = () => {
       originalPrice: "",
       category: "Kilo Alma",
       features: "",
-      imgURL: "",
+      image: "",
     });
     setImagePreview("");
     setEditingId(null);
@@ -278,7 +278,7 @@ const AdminPackages = () => {
                             type="button"
                             onClick={() => {
                               setImagePreview("");
-                              setFormData((prev) => ({ ...prev, imgURL: "" }));
+                              setFormData((prev) => ({ ...prev, image: "" }));
                               const fileInput = document.querySelector('input[type="file"]');
                               if (fileInput) fileInput.value = "";
                             }}
@@ -548,7 +548,7 @@ const AdminPackages = () => {
                       </div>
 
                       {/* Image */}
-                      {(pkg.imgURL || pkg.image) && (
+                      {pkg.image && (
                         <div style={{
                           width: "100%",
                           height: "160px",
@@ -558,7 +558,7 @@ const AdminPackages = () => {
                           backgroundColor: "var(--bg-body)",
                         }}>
                           <img
-                            src={pkg.imgURL || pkg.image}
+                            src={pkg.image}
                             alt={pkg.title}
                             style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }}
                             onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}

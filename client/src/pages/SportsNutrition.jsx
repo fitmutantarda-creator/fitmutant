@@ -156,7 +156,7 @@ const SportsNutrition = () => {
                 {/* Kartın genişliğini zorla %100 yapıyoruz */}
                 <PackageCard
                   {...pkg}
-                  image={staticImages[index % 3]}
+                  image={pkg.image || staticImages[index % staticImages.length]}
                   themeColor={themeColor}
                   onSelect={() => handleSelect(pkg)}
                 />

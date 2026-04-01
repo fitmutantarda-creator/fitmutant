@@ -154,7 +154,7 @@ const WeightLoss = () => {
             >
               <PackageCard
                 {...pkg}
-                image={staticImages[index % 3]}
+                image={pkg.image || staticImages[index % staticImages.length]}
                 themeColor={themeColor}
                 onSelect={() => handleSelect(pkg)}
               />
