@@ -2,13 +2,17 @@ import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppButton = () => {
-  // Replace with actual number
-  const phoneNumber = "905555555555";
+  const phoneNumber = "905418142732";
   const message = "Merhaba, koçluk hakkında bilgi almak istiyorum.";
 
   const handleClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+    const confirmed = window.confirm(
+      "WhatsApp ile iletişime geçmek istiyor musunuz?"
+    );
+    if (confirmed) {
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(url, "_blank");
+    }
   };
 
   return (

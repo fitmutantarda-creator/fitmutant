@@ -15,6 +15,7 @@ app.use(cors()); // Cross-Origin kaynak paylaşımı için
 
 import packageRoutes from "./routes/packageRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import Package from "./models/Package.js";
 
 // MongoDB Bağlantısı
@@ -28,6 +29,7 @@ mongoose
 // Routes
 app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Temel Başlangıç Rotası
 app.get("/", (req, res) => {
@@ -35,6 +37,6 @@ app.get("/", (req, res) => {
 });
 
 // Sunucuyu Başlat
-app.listen(PORT, () => {
+app.listen(PORT, "127.0.0.1", () => {
   console.log(`🚀 Sunucu http://localhost:${PORT} adresinde yayında`);
 });

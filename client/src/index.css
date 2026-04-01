@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap");
-
 @theme {
   --color-on-error-container: #93000a;
   --color-surface-container-highest: #e1e3e4;

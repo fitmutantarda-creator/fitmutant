@@ -17,7 +17,7 @@ export const loginAdmin = (req, res) => {
     return res.status(500).json({ message: 'Sunucu yapılandırma hatası.' });
   }
 
-  if (password === adminPassword) {
+  if (password.trim() === adminPassword.trim()) {
     // Correct password, generate token
     const token = jwt.sign(
       { role: 'admin' }, 

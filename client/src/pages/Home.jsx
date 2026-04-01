@@ -12,6 +12,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
+// eslint-disable-next-line no-unused-vars
 const CategoryButton = ({ to, color, title, icon: Icon, description }) => (
   <Link
     to={to}
@@ -50,7 +51,7 @@ const CategoryButton = ({ to, color, title, icon: Icon, description }) => (
 
 const Home = () => {
   const phone = "+905418142732";
-  const email = "ardapekcanfit@gmail.com";
+  const email = "fitmutantarda@gmail.com";
   const instagram = "fit.mutant";
 
   return (
@@ -278,21 +279,38 @@ const Home = () => {
             {
               icon: FaInstagram,
               color: "#E1306C",
-              link: `https://instagram.com/${instagram}`,
+              link: `https://www.instagram.com/${instagram}/`,
+              label: "Instagram",
             },
             {
               icon: FaWhatsapp,
               color: "#25D366",
               link: `https://wa.me/${phone.replace("+", "")}`,
+              label: "WhatsApp",
             },
-            { icon: FaEnvelope, color: "#34495e", link: `mailto:${email}` },
-            { icon: FaPhoneAlt, color: "#2c3e50", link: `tel:${phone}` },
+            {
+              icon: FaEnvelope,
+              color: "#34495e",
+              link: `mailto:${email}`,
+              label: "Email",
+            },
+            { icon: FaPhoneAlt, color: "#2c3e50", link: `tel:${phone}`, label: "Telefon" },
           ].map((item, i) => (
-            <a
+            <button
               key={i}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                const confirmed = window.confirm(
+                  `${item.label} ile iletişime geçmek istiyor musunuz?`
+                );
+                if (confirmed) {
+                  if (item.link.startsWith("tel:") || item.link.startsWith("mailto:")) {
+                    window.location.href = item.link;
+                  } else {
+                    window.open(item.link, "_blank");
+                  }
+                }
+              }}
               style={{
                 width: "65px",
                 height: "65px",
@@ -314,7 +332,7 @@ const Home = () => {
               }
             >
               <item.icon />
-            </a>
+            </button>
           ))}
         </div>
       </section>

@@ -9,6 +9,26 @@ import {
 } from "react-icons/md";
 
 const About = () => {
+  const instagramUrl = "https://www.instagram.com/fit.mutant/";
+  const whatsappNumber = "905418142732";
+  const whatsappMessage = "Merhaba, koçluk hakkında bilgi almak istiyorum.";
+
+  const handleContactClick = (platform, url = null) => {
+    const confirmed = window.confirm(
+      `${platform} ile iletişime geçmek istiyor musunuz?`
+    );
+    if (confirmed) {
+      if (platform === "WhatsApp") {
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
+          "_blank"
+        );
+      } else if (url) {
+        window.open(url, "_blank");
+      }
+    }
+  };
+
   return (
     <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white selection:bg-primary/30 min-h-screen pb-32 transition-colors">
       <Header title="Hakkımızda" showBack={true} />
@@ -32,7 +52,7 @@ const About = () => {
             className="w-full h-full object-cover opacity-90 dark:opacity-60 grayscale hover:grayscale-0 transition-all duration-700"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvfzSjkxug9j3b4kyMj5j7oKL3Zs88hQjEw0hf-_8ud-bS5DYAUcySL-MiWGx8kQlMQjuJVS5ElJk4MGsOhvPAU4N_K_-iQq1Xl1Te8TtIOA3CXJYb41d16DQfz2umFJD0IKpaEG1aoTisi_L-AaCDJXi92UbxgzxrDX6Cjw54t-75LepfIGpzPG46SzOR8m2lTR5tyziGfF_qu-fHEnitS7BoNwfk2EowN_EBhA3Rlkz4WKkPyoVn7oXFRqwSV4l7tXto5tuTQcTb"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent dark:from-background-dark dark:via-transparent dark:to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent dark:from-background-dark dark:via-transparent dark:to-transparent"></div>
           <div className="absolute bottom-4 left-4">
             <div className="bg-primary px-3 py-1 rounded-full text-[10px] font-bold text-background-dark uppercase">
               Limitlerini Zorla
@@ -92,21 +112,23 @@ const About = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4">
             {/* Instagram */}
-            <a
-              href="#"
-              className="flex flex-col items-center justify-center p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-primary/50 transition-colors"
+            <button
+              onClick={() =>
+                handleContactClick("Instagram", instagramUrl)
+              }
+              className="flex flex-col items-center justify-center p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-primary/50 transition-colors cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center mb-2 text-white">
+              <div className="w-12 h-12 rounded-full bg-linear-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center mb-2 text-white">
                 <MdCameraAlt className="text-2xl" />
               </div>
               <span className="text-xs font-medium text-slate-600 dark:text-gray-300">
                 Instagram
               </span>
-            </a>
+            </button>
             {/* WhatsApp */}
-            <a
-              href="#"
-              className="flex flex-col items-center justify-center p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-primary/50 transition-colors"
+            <button
+              onClick={() => handleContactClick("WhatsApp")}
+              className="flex flex-col items-center justify-center p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-primary/50 transition-colors cursor-pointer"
             >
               <div className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center mb-2 text-white">
                 <MdChat className="text-2xl" />
@@ -114,7 +136,7 @@ const About = () => {
               <span className="text-xs font-medium text-slate-600 dark:text-gray-300">
                 WhatsApp
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </main>

@@ -1,4 +1,5 @@
 import Package from '../models/Package.js';
+import cloudinary from '../config/cloudinary.js';
 
 // @desc    Get all packages
 // @route   GET /api/packages
@@ -22,7 +23,13 @@ export const getPackages = async (req, res) => {
 // @access  Public/Admin
 export const createPackage = async (req, res) => {
   try {
-    const newPackage = await Package.create(req.body);
+    // Eğer image URL'i varsa, bunu imgURL'e aktar
+    const packageData = {
+      ...req.body,
+      imgURL: req.body.imgURL || req.body.image || '',
+    };
+
+    const newPackage = await Package.create(packageData);
     res.status(201).json(newPackage);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -34,14 +41,31 @@ export const createPackage = async (req, res) => {
 // @access  Public/Admin
 export const updatePackage = async (req, res) => {
   try {
+    const updatedData = { ...req.body };
+
+    // Yeni imgURL varsa, eski image Cloudinary'den sil (opsiyonel)
+    const existingPackage = await Package.findById(req.params.id);
+    
+    if (updatedData.imgURL && existingPackage.imgURL !== updatedData.imgURL) {
+      // Eğer eski URL Cloudinary'deyse, silebiliriz (optional)
+      // Bu kısım isteğe bağlıdır
+    }
+
+    // imgURL'i güncelle
+    if (updatedData.imgURL) {
+      updatedData.imgURL = updatedData.imgURL;
+    }
+
     const updatedPackage = await Package.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updatedData,
       { new: true, runValidators: true }
     );
+
     if (!updatedPackage) {
       return res.status(404).json({ message: 'Package not found' });
     }
+
     res.status(200).json(updatedPackage);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -54,9 +78,14 @@ export const updatePackage = async (req, res) => {
 export const deletePackage = async (req, res) => {
   try {
     const deletedPackage = await Package.findByIdAndDelete(req.params.id);
+
     if (!deletedPackage) {
       return res.status(404).json({ message: 'Package not found' });
     }
+
+    // Cloudinary'den image'ı sil (opsiyonel)
+    // Eğer imgURL varsa ve Cloudinary'den geliyorsa silebiliriz
+
     res.status(200).json({ message: 'Package deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

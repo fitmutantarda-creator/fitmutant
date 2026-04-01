@@ -21,7 +21,7 @@ const AdminAuthModal = ({ onClose }) => {
     setError("");
     setLoading(true);
     try {
-      const res = await api.post("/auth/login", { password });
+      const res = await api.post("/auth/login", { password: password.trim() });
       sessionStorage.setItem("adminToken", res.data.token);
       onClose(); // Modalı kapat
       navigate("/admin/packages"); // Admin paneline yönlendir
@@ -35,26 +35,25 @@ const AdminAuthModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
       <div
-        className="bg-[var(--bg-card)] border border-[var(--border-col)] rounded-[2.5rem] w-full max-w-[340px] shadow-2xl relative"
-        style={{ padding: "40px 24px" }} // İçerik kenarlara yapışmasın
+        className="bg-(--bg-card) border border-(--border-col) rounded-[2.5rem] w-full max-w-85 shadow-2xl relative"
+        style={{ padding: "40px 24px" }}
       >
         <button
           onClick={onClose}
-          style={{ width: "40px", height: "40px" }} // Sabit boyut
-          className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-[var(--bg-body)] text-[var(--text-muted)] hover:text-white transition-all active:scale-90"
+          style={{ width: "40px", height: "40px" }}
+          className="absolute top-4 right-4 flex items-center justify-center rounded-full bg-(--bg-body) text-(--text-muted) hover:text-white transition-all active:scale-90"
         >
           ✕
         </button>
 
         <div className="text-center" style={{ marginBottom: "32px" }}>
           {" "}
-          {/* Başlık altı boşluk zorlandı */}
-          <h2 className="text-xl font-black text-[var(--text-main)] mb-2 font-heading uppercase tracking-[0.2em]">
+          <h2 className="text-xl font-black text-(--text-main) mb-2 font-heading uppercase tracking-[0.2em]">
             ADMİN GİRİŞİ
           </h2>
-          <div className="h-1 w-12 bg-[var(--theme-orange)] mx-auto rounded-full opacity-80"></div>
+          <div className="h-1 w-12 bg-(--theme-orange) mx-auto rounded-full opacity-80"></div>
         </div>
 
         <form
@@ -63,9 +62,8 @@ const AdminAuthModal = ({ onClose }) => {
           style={{ gap: "20px" }}
         >
           {" "}
-          {/* Elemanlar arası boşluk zorlandı */}
           <div className="flex flex-col" style={{ gap: "8px" }}>
-            <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] ml-1">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-(--text-muted) ml-1">
               GÜVENLİK ANAHTARI
             </label>
             <input
@@ -75,12 +73,12 @@ const AdminAuthModal = ({ onClose }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
-                padding: "18px", // Dikey genişlik
-                height: "60px", // Yükseklik garantisi
+                padding: "18px",
+                height: "60px",
                 letterSpacing: "0.5em",
                 display: "block",
               }}
-              className="w-full bg-[var(--bg-body)] text-[var(--text-main)] border border-[var(--border-col)] rounded-2xl outline-none focus:border-[var(--theme-orange)] text-center text-xl font-mono shadow-inner appearance-none"
+              className="w-full bg-(--bg-body) text-(--text-main) border border-(--border-col) rounded-2xl outline-none focus:border-(--theme-orange) text-center text-xl font-mono shadow-inner appearance-none"
             />
           </div>
           {error && (
@@ -92,14 +90,14 @@ const AdminAuthModal = ({ onClose }) => {
             type="submit"
             disabled={loading}
             style={{
-              padding: "18px", // Buton içi boşluk
-              height: "60px", // Buton yükseklik garantisi
-              marginTop: "10px", // Üstteki inputtan uzaklaş
+              padding: "18px",
+              height: "60px",
+              marginTop: "10px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
-            className="w-full bg-[var(--text-main)] text-[var(--bg-body)] font-black rounded-2xl uppercase tracking-[0.15em] text-xs active:scale-[0.96] transition-all shadow-lg disabled:opacity-50"
+            className="w-full bg-(--text-main) text-(--bg-body) font-black rounded-2xl uppercase tracking-[0.15em] text-xs active:scale-[0.96] transition-all shadow-lg disabled:opacity-50"
           >
             {loading ? "GİRİŞ YAPILIYOR..." : "SİSTEME GİR"}
           </button>
