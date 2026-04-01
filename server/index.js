@@ -9,20 +9,35 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    "http://localhost:5173", // Local Vite dev server
+    "http://127.0.0.1:5173",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    "https://fitmutant.vercel.app", // Vercel deployment
+    process.env.FRONTEND_URL, // Environment variable for production
+  ].filter(Boolean),
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 // Middleware (Ara Yazılımlar)
-app.use(express.json()); // JSON gövdesini ayrıştırmak için
-app.use(cors()); // Cross-Origin kaynak paylaşımı için
+app.use(express.json({ limit: "50mb" })); // JSON gövdesini ayrıştırmak için
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(cors(corsOptions)); // Cross-Origin kaynak paylaşımı için
 
 import packageRoutes from "./routes/packageRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
-import Package from "./models/Package.js";
 
 // MongoDB Bağlantısı
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("✅ MongoDB Bağlantısı Başarılı (ES Modules Active)");
+    console.log("✅ MongoDB Bağlantısı Başarılı");
   })
   .catch((err) => console.log("❌ MongoDB Bağlantı Hatası:", err));
 
@@ -31,12 +46,28 @@ app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Fit Mutant API is running" });
+});
+
 // Temel Başlangıç Rotası
 app.get("/", (req, res) => {
-  res.send("Fit Mutant API Sunucusu modern import yapısıyla çalışıyor...");
+  res.send("Fit Mutant API Sunucusu çalışıyor...");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  res.status(err.status || 500).json({
+    error: err.message || "Internal Server Error",
+  });
 });
 
 // Sunucuyu Başlat
-app.listen(PORT, "0.0.0.0", () => {
+const HOST = process.env.HOST || "0.0.0.0";
+app.listen(PORT, HOST, () => {
   console.log(`🚀 Sunucu http://localhost:${PORT} adresinde yayında`);
+  console.log(`📍 CORS Enabled for: ${corsOptions.origin.join(", ")}`);
 });
+
