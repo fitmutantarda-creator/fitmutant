@@ -14,10 +14,14 @@ const corsOptions = {
   origin: [
     "http://localhost:5173", // Local Vite dev server
     "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
     "http://localhost:5000",
     "http://127.0.0.1:5000",
-    "https://fitmutant.vercel.app", // Vercel deployment
-    process.env.FRONTEND_URL, // Environment variable for production
+    "https://fitmutant.vercel.app",  // Vercel deployment
+    "https://www.fitmutant.com",     // Production domain
+    "https://fitmutant.com",         // Production domain (www'suz)
+    process.env.FRONTEND_URL,        // Environment variable for production
   ].filter(Boolean),
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
