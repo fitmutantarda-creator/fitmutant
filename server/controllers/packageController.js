@@ -23,11 +23,13 @@ export const getPackages = async (req, res) => {
 // @access  Public/Admin
 export const createPackage = async (req, res) => {
   try {
-    // Eğer image URL'i varsa, bunu imgURL'e aktar
+    // Frontend'den gelen image alanını kesin olarak atıyoruz
     const packageData = {
       ...req.body,
-      imgURL: req.body.imgURL || req.body.image || '',
+      image: req.body.image || req.body.imgURL || '',
     };
+    // Gereksiz alanı siliyoruz ki Mongoose strict uyarı vermesin
+    delete packageData.imgURL;
 
     const newPackage = await Package.create(packageData);
     res.status(201).json(newPackage);
@@ -43,17 +45,13 @@ export const updatePackage = async (req, res) => {
   try {
     const updatedData = { ...req.body };
 
-    // Yeni imgURL varsa, eski image Cloudinary'den sil (opsiyonel)
+    // Yeni image varsa, eski image Cloudinary'from sil (opsiyonel)
     const existingPackage = await Package.findById(req.params.id);
     
-    if (updatedData.imgURL && existingPackage.imgURL !== updatedData.imgURL) {
-      // Eğer eski URL Cloudinary'deyse, silebiliriz (optional)
-      // Bu kısım isteğe bağlıdır
-    }
-
-    // imgURL'i güncelle
+    // image'i güncelle
     if (updatedData.imgURL) {
-      updatedData.imgURL = updatedData.imgURL;
+      updatedData.image = updatedData.imgURL;
+      delete updatedData.imgURL;
     }
 
     const updatedPackage = await Package.findByIdAndUpdate(
