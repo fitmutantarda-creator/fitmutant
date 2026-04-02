@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import AdminAuthModal from "../components/AdminAuthModal";
 import { Link } from "react-router-dom";
 import heroImg from "../assets/kiloverme.jpeg";
 import {
@@ -56,6 +57,34 @@ const Home = () => {
   const phone = "+905418142732";
   const email = "fitmutantarda@gmail.com";
   const instagram = "fit.mutant";
+
+  // Easter Egg Authentication State
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const clickTimeoutRef = useRef(null);
+
+  // Handle Easter Egg Name Clicks
+  const handleAdminAuthClick = () => {
+    setClickCount((prev) => prev + 1);
+
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      setClickCount(0); // Reset after 2 seconds
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (clickCount >= 6) {
+      setShowAuthModal(true);
+      setClickCount(0);
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+    }
+  }, [clickCount]);
 
   return (
     <div
@@ -151,11 +180,14 @@ const Home = () => {
             <p style={{ marginBottom: "15px" }}>
               Merhaba, ben{" "}
               <strong
+                onClick={handleAdminAuthClick}
                 style={{
                   color: "#b7ff05",
                   backgroundColor: "#000",
                   padding: "2px 8px",
                   borderRadius: "4px",
+                  cursor: "default",
+                  userSelect: "none",
                 }}
               >
                 Arda Pekcan
@@ -345,6 +377,10 @@ const Home = () => {
       </section>
 
       <ConfirmModal {...modalProps} />
+
+      {showAuthModal && (
+        <AdminAuthModal onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import WhatsAppButton from "./WhatsAppButton";
-import AdminAuthModal from "./AdminAuthModal";
+
 import logo from "../assets/logo3.jpg";
 import { FaArrowLeft, FaSun, FaMoon } from "react-icons/fa";
 
@@ -10,10 +10,7 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const [theme, setTheme] = useState("dark");
 
-  // Easter Egg Authentication State
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
-  const clickTimeoutRef = useRef(null);
+
 
   // Load theme from local storage or default to dark
   useEffect(() => {
@@ -29,28 +26,7 @@ const Layout = ({ children }) => {
     localStorage.setItem("theme", newTheme);
   };
 
-  // Handle Easter Egg Footer Clicks
-  const handleFooterClick = () => {
-    setClickCount((prev) => prev + 1);
 
-    if (clickTimeoutRef.current) {
-      clearTimeout(clickTimeoutRef.current);
-    }
-
-    clickTimeoutRef.current = setTimeout(() => {
-      setClickCount(0); // Reset after 2 seconds
-    }, 2000);
-  };
-
-  useEffect(() => {
-    if (clickCount >= 5) {
-      setShowAuthModal(true);
-      setClickCount(0);
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-    }
-  }, [clickCount]);
 
   const isHome = location.pathname === "/";
   const isAdmin = location.pathname.startsWith("/admin");
@@ -165,21 +141,30 @@ const Layout = ({ children }) => {
           width: "100%",
         }}
       >
-        <p
-          onClick={handleFooterClick}
-          className="select-none cursor-default active:opacity-50 transition-opacity"
+        <div
+          className="select-none transition-opacity"
           style={{ margin: 0 }}
         >
-          &copy; {new Date().getFullYear()} ARDA PEKCAN | FIT MUTANT. All rights
-          reserved.
-        </p>
+          <p style={{ margin: "0 0 8px 0" }}>
+            &copy; {new Date().getFullYear()} ARDA PEKCAN | FIT MUTANT. All rights reserved.
+          </p>
+          <p style={{ margin: 0, fontSize: "11px", color: "var(--text-muted)", opacity: 0.8 }}>
+            Bu uygulama{" "}
+            <Link to="/" style={{ color: "#b7ff05", textDecoration: "none", fontWeight: "600" }}>
+              Fit Mutant
+            </Link>{" "}
+            için{" "}
+            <a href="https://b-exp.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ color: "#ff8c00", textDecoration: "none", fontWeight: "600" }}>
+              B-Exp
+            </a>{" "}
+            tarafından geliştirilmiştir.
+          </p>
+        </div>
       </footer>
 
       {!isAdmin && <WhatsAppButton />}
 
-      {showAuthModal && (
-        <AdminAuthModal onClose={() => setShowAuthModal(false)} />
-      )}
+
     </div>
   );
 };

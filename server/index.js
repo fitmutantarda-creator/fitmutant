@@ -50,9 +50,22 @@ app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 
-// Health check endpoint
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Fit Mutant API is running" });
+// Health check and Ping endpoint (UptimeRobot için)
+app.get("/api/health", async (req, res) => {
+  try {
+    // Veritabanının ve sunucunun uyku moduna geçmesini engellemek için db'ye ufak bir sorgu (ping)
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.connection.db.admin().ping();
+    }
+    res.json({ 
+      status: "ok", 
+      message: "Fit Mutant API is active and Database connection is alive",
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Ping Hatası:", error);
+    res.status(500).json({ status: "error", message: "Database ping failed" });
+  }
 });
 
 // Temel Başlangıç Rotası
