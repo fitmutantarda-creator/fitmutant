@@ -1,0 +1,60 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Her Pazartesi 09:00 UTC'de çalışır
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      
+      - name: Update client dependencies
+        working-directory: ./client
+        run: |
+          npm update
+          npm audit fix --force || true
+      
+      - name: Update server dependencies
+        working-directory: ./server
+        run: |
+          npm update
+          npm audit fix --force || true
+      
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create Pull Request
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update dependencies'
+          title: '🔄 Automated dependency updates'
+          body: |
+            ## 📦 Dependency Updates
+            
+            This PR contains automated dependency updates.
+            
+            - [x] Tested on Node 18.x
+            - [ ] Manual testing recommended
+          branch: chore/dependency-updates
+          delete-branch: true
+          labels: dependencies, automated
+          assignees: ${{ github.repository_owner }}

@@ -8,10 +8,18 @@ const PackageCard = ({
   originalPrice,
   features,
   themeColor,
-  onSelect,
 }) => {
+  const phoneNumber = "905418142732";
+  const message = encodeURIComponent(
+    `Selam! *${title}* paketi hakkında bilgi almak istiyorum. (Fiyat: ${price} TL)`
+  );
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+  // ... (importlar ve whatsappUrl kısmı aynı)
+
   return (
     <div
+      className="package-card-container" // CSS tarafında yönetmek daha kolaydır ama inline devam edelim
       style={{
         backgroundColor: "var(--bg-card)",
         borderRadius: "8px",
@@ -19,19 +27,19 @@ const PackageCard = ({
         display: "flex",
         flexDirection: "column",
         border: `1px solid ${themeColor}`,
-        boxShadow: `0 0 10px ${themeColor}20`, // 20 is hex opacity
+        boxShadow: `0 0 10px ${themeColor}20`,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+        height: "550px",
+        margin: "4px",
+        position: "relative"
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-5px)";
-        e.currentTarget.style.boxShadow = `0 10px 20px ${themeColor}40`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow = `0 0 10px ${themeColor}20`;
-      }}
+      // onMouseEnter ve onMouseLeave aynı kalsın...
     >
-      <div style={{ height: "200px", overflow: "hidden" }}>
+      {/* Görsel Alanı */}
+      <div style={{ height: "180px", minHeight: "180px" }}>
         <img
           src={image}
           alt={title}
@@ -39,86 +47,65 @@ const PackageCard = ({
         />
       </div>
 
+      {/* İçerik Alanı */}
       <div
         style={{
-          padding: "20px",
-          flex: 1,
+          padding: "15px",
           display: "flex",
           flexDirection: "column",
+          flex: 1, // Kalan tüm boşluğu doldurması için
+          justifyContent: "space-between" // Butonu en alta iter
         }}
       >
-        <h3
-          style={{
-            color: themeColor,
-            fontSize: "1.5rem",
+        <div>
+          <h3 style={{ 
+            color: themeColor, 
+            fontSize: "1.2rem", 
             marginBottom: "10px",
-          }}
-        >
-          {title}
-        </h3>
+            height: "2.8rem", // Başlık alanını sabitle
+            overflow: "hidden" 
+          }}>
+            {title}
+          </h3>
 
-        <div style={{ marginBottom: "20px" }}>
-          <span
-            style={{
-              textDecoration: "line-through",
-              color: "var(--text-muted)",
-              marginRight: "10px",
-              fontSize: "0.9rem",
-            }}
-          >
-            {originalPrice} TL
-          </span>
-          <span
-            style={{
-              color: "var(--text-main)",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-            }}
-          >
-            {price} TL
-          </span>
+          <div style={{ marginBottom: "15px" }}>
+            <span style={{ textDecoration: "line-through", color: "var(--text-muted)", marginRight: "10px", fontSize: "0.85rem" }}>
+              {originalPrice} TL
+            </span>
+            <span style={{ color: "var(--text-main)", fontSize: "1.3rem", fontWeight: "bold" }}>
+              {price} TL
+            </span>
+          </div>
+
+          <ul style={{ listStyle: "none", padding: 0 }}>
+            {features.slice(0, 5).map((feature, index) => ( // Özellik sayısını sınırla veya alanı sabitle
+              <li key={index} style={{ marginBottom: "8px", display: "flex", alignItems: "center", color: "var(--text-muted)" }}>
+                <FaCheck style={{ color: themeColor, marginRight: "8px", minWidth: "12px" }} />
+                <span style={{ fontSize: "0.85rem" }}>{feature}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <ul style={{ listStyle: "none", marginBottom: "20px", flex: 1 }}>
-          {features.map((feature, index) => (
-            <li
-              key={index}
-              style={{
-                marginBottom: "10px",
-                display: "flex",
-                alignItems: "center",
-                color: "var(--text-muted)",
-              }}
-            >
-              <FaCheck
-                style={{
-                  color: themeColor,
-                  marginRight: "10px",
-                  minWidth: "15px",
-                }}
-              />
-              <span style={{ fontSize: "0.9rem" }}>{feature}</span>
-            </li>
-          ))}
-        </ul>
-
-        <button
-          onClick={onSelect}
+        {/* WhatsApp Linki */}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             backgroundColor: themeColor,
-            color: "black", // Assuming text on bright colors should be black
-            padding: "15px",
+            color: "black",
+            padding: "12px",
             borderRadius: "4px",
             fontWeight: "bold",
-            fontSize: "1rem",
-            width: "100%",
-            transition: "opacity 0.2s",
+            textAlign: "center",
+            textDecoration: "none",
+            display: "block",
+            marginTop: "10px"
           }}
-          onMouseEnter={(e) => (e.target.style.opacity = "0.9")}
-          onMouseLeave={(e) => (e.target.style.opacity = "1")}
         >
           SATIN AL / BİLGİ AL
-        </button>
+        </a>
       </div>
     </div>
   );

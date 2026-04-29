@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/fitmutant/fitmutant/discussions
+    about: Genel sorular ve tartışmalar
+  - name: 📚 Dokumentasyon
+    url: https://github.com/fitmutant/fitmutant/wiki
+    about: API ve kullanım rehberleri
+  - name: 💌 Email
+    url: mailto:contact@fitmutant.com
+    about: Doğrudan iletişim

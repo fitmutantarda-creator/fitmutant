@@ -36,6 +36,7 @@ app.use(cors(corsOptions)); // Cross-Origin kaynak paylaşımı için
 import packageRoutes from "./routes/packageRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import announcementRoutes from "./routes/announcementRoutes.js";
 
 // MongoDB Bağlantısı
 mongoose
@@ -49,6 +50,7 @@ mongoose
 app.use("/api/packages", packageRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/announcements", announcementRoutes);
 
 // Health check and Ping endpoint (UptimeRobot için)
 app.get("/api/health", async (req, res) => {

@@ -1,27 +1,35 @@
 # Dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
+package-lock.json
+yarn.lock
 
 # Testing
-coverage
+coverage/
+.nyc_output/
 
 # Production
-dist
-build
+dist/
+build/
+*.tgz
 
 # Misc
 .DS_Store
 .env
 .env.local
+.env.*.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.pem
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
 # Editor
 .vscode/
@@ -31,3 +39,21 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+.swp
+.swo
+*~
+
+# OS
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# IDE specific
+.metals/
+.bloop/
+*.iml
+
+# Temporary files
+*.tmp
+*.bak
+*.orig

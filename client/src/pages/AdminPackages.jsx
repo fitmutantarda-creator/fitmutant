@@ -8,6 +8,7 @@ import {
   uploadImage,
 } from "../services/packageService";
 import ConfirmModal from "../components/ConfirmModal";
+import AdminNav from "../components/AdminNav";
 import useModal from "../hooks/useModal";
 
 const inp = {
@@ -179,6 +180,7 @@ const AdminPackages = () => {
 
   return (
     <div style={{ minHeight: "100vh", paddingBottom: "80px", backgroundColor: "var(--bg-body)" }}>
+      <AdminNav />
       <main style={{ padding: "24px 16px", maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}>
 
         {/* Header */}

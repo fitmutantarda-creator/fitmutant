@@ -6,6 +6,7 @@ import WeightLoss from "./pages/WeightLoss";
 import WeightGain from "./pages/WeightGain";
 import SportsNutrition from "./pages/SportsNutrition";
 import AdminPackages from "./pages/AdminPackages";
+import AdminAnnouncements from "./pages/AdminAnnouncements";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
@@ -22,6 +23,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <AdminPackages />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/announcements" 
+            element={
+              <ProtectedRoute>
+                <AdminAnnouncements />
               </ProtectedRoute>
             } 
           />
